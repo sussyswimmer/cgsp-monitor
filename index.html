@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light">
+  <title>CGSP Monitor</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23146b4a'/%3E%3Cpath d='M16 8v8l5 3' stroke='%23f7f5ef' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#today">Skip to today’s run</a>
+  <main>
+    <header class="masthead">
+      <p class="eyebrow">Morning run · this computer</p>
+      <h1>CGSP Monitor</h1>
+      <p class="keep-open"><strong>Keep this page open.</strong> The <span data-send-time>06:00</span> email only goes out while it is open on this computer.</p>
+    </header>
+
+    <p id="announce" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+
+    <section id="slept" class="card slept" aria-labelledby="slept-title" hidden>
+      <h2 id="slept-title">Chrome put this tab to sleep</h2>
+      <p>A sleeping tab runs nothing, so it could not start the morning run while it slept. To stop it happening: right-click this tab and choose <strong>Pin</strong>, or keep it as the front tab of its own window, or add this site under Chrome Settings → Performance → <em>Always keep these sites active</em>.</p>
+    </section>
+
+    <section id="connection" class="connection" data-tone="calm" aria-labelledby="connection-title">
+      <span class="dot" aria-hidden="true"></span>
+      <div>
+        <h2 id="connection-title" class="connection-title">Looking for this computer…</h2>
+        <p id="connection-detail" class="connection-detail"></p>
+      </div>
+    </section>
+
+    <section id="pair" class="card pair" aria-labelledby="pair-title" hidden>
+      <h2 id="pair-title">Connect this browser to this computer</h2>
+      <p>The page needs a one-time key from the CGSP helper running on this PC. Nothing is sent anywhere else.</p>
+      <ol class="steps">
+        <li>Press <strong>Connect</strong>. A small window opens and closes by itself.</li>
+        <li>If Chrome asks to let this site reach <em>apps on this device</em>, choose <strong>Allow</strong>.</li>
+      </ol>
+      <div class="row">
+        <button id="connect" class="button primary" type="button">Connect</button>
+      </div>
+      <p class="fine">Popup blocked? Allow popups for this site, or open the address that <code>cgsp launcher pair-url</code> prints on this computer.</p>
+    </section>
+
+    <section id="today" class="card today" aria-labelledby="today-title" data-tone="calm" hidden>
+      <div class="today-head">
+        <div>
+          <p class="eyebrow" id="today-date">Today</p>
+          <h2 id="today-title" class="state-headline">Checking…</h2>
+          <p id="today-detail" class="state-detail"></p>
+          <p id="missed" class="missed" hidden></p>
+        </div>
+        <div class="next">
+          <p class="eyebrow">Next run</p>
+          <p class="next-time"><span id="next-time">06:00</span></p>
+          <p id="next-when" class="next-when"></p>
+        </div>
+      </div>
+
+      <figure class="dial" aria-labelledby="dial-caption">
+        <div class="track">
+          <span class="window" id="dial-window"></span>
+          <span class="now" id="dial-now"><span class="now-label" id="dial-now-label">now</span></span>
+        </div>
+        <div class="ticks" aria-hidden="true"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+        <figcaption id="dial-caption" class="dial-caption"></figcaption>
+      </figure>
+
+      <div id="paused-banner" class="paused" hidden>
+        <p><strong>Paused.</strong> No morning email goes out until you resume it. Send to everyone now still works.</p>
+        <button id="resume" class="button primary" type="button">Resume the daily email</button>
+      </div>
+
+      <div id="progress" class="progress" hidden>
+        <span class="bar" aria-hidden="true"></span>
+        <p id="progress-text">A run is going.</p>
+      </div>
+    </section>
+
+    <section id="actions" class="card actions" aria-labelledby="actions-title" hidden>
+      <h2 id="actions-title">Do something now</h2>
+      <div class="action-grid">
+        <div class="action">
+          <button id="preview" class="button" type="button">Preview (free, no email)</button>
+          <p>Builds a sample email from today’s sources with made-up summaries. No DeepSeek credit, nothing sent.</p>
+          <button id="open-preview" class="link" type="button" hidden>Open the last preview</button>
+        </div>
+        <div class="action">
+          <button id="send-now" class="button danger" type="button">Send to everyone now</button>
+          <p>Runs the real digest and emails every recipient straight away, even if today’s email already went. Uses DeepSeek credit.</p>
+        </div>
+      </div>
+      <p class="fine" id="pause-row"><button id="pause" class="link" type="button">Pause the daily email</button> — mornings stay quiet until you resume.</p>
+      <p id="action-result" class="action-result" role="status"></p>
+    </section>
+
+    <section id="last" class="card last" aria-labelledby="last-title" hidden>
+      <h2 id="last-title">Last run</h2>
+      <dl id="last-facts" class="facts"></dl>
+      <pre id="last-log" class="log" tabindex="0" aria-label="Last lines of the run log" hidden></pre>
+    </section>
+
+    <section class="card help" aria-labelledby="help-title">
+      <h2 id="help-title">Keeping it running</h2>
+      <ul class="plain">
+        <li><strong>Leave this tab open</strong> in Chrome or Edge on this PC, as the front tab of its own window (minimising the window is fine), or pinned (right-click the tab, <em>Pin</em>). A tab left behind other tabs can be put to sleep.</li>
+        <li><strong>Memory Saver:</strong> Chrome’s Memory Saver puts background tabs to sleep, and a sleeping tab cannot start the run. Add this site under Settings → Performance → <em>Always keep these sites active</em>.</li>
+        <li><strong>Permission:</strong> the first time, Chrome asks to let this site reach apps on this device. Choose <strong>Allow</strong>, or the page cannot start the run.</li>
+        <li><strong>Sleep:</strong> the helper wakes a sleeping computer just before the send time, if Windows allows wake timers. A computer that is shut down, or that does not wake, sends nothing that morning.</li>
+        <li><strong>Late:</strong> opened up to 90 minutes after the send time, the page still starts the run. Later than that, the morning is skipped.</li>
+      </ul>
+    </section>
+
+    <footer class="foot">
+      <p>This page runs nothing by itself: it asks the CGSP helper on this PC, which only starts a run when asked. <button id="forget" class="link" type="button" hidden>Disconnect this browser</button></p>
+      <p id="helper-version" class="fine"></p>
+    </footer>
+  </main>
+
+  <dialog id="confirm" class="dialog" aria-labelledby="confirm-title">
+    <form method="dialog">
+      <h2 id="confirm-title">Send today’s digest to everyone now?</h2>
+      <p>This runs the full digest and emails every recipient as soon as it finishes, usually within 30 minutes. It uses DeepSeek credit, and it sends again even if this morning’s email already went.</p>
+      <div class="row end">
+        <button class="button" value="cancel" type="submit" autofocus>Cancel</button>
+        <button class="button danger" value="send" type="submit">Send to everyone</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="preview-dialog" class="dialog wide" aria-labelledby="preview-title">
+    <div class="row between">
+      <h2 id="preview-title">Preview: invented sample content</h2>
+      <form method="dialog"><button class="button" type="submit">Close</button></form>
+    </div>
+    <iframe id="preview-frame" title="Preview of the email" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe>
+  </dialog>
+</body>
+</html>
