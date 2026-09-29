@@ -42,7 +42,7 @@ code { font: 0.9em var(--mono); background: var(--green-wash); padding: 1px 5px;
 .skip:focus { top: var(--s4); }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.eyebrow { color: var(--green); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.meta { color: var(--muted); font-size: 14px; }
 
 /* ---- masthead: the promise the client must not miss */
 .masthead { padding-bottom: var(--s5); border-bottom: 1px solid var(--line); }
